@@ -19,19 +19,21 @@ Built an Autonomous RC Car using a simple RC Car, Arduino Uno Board and some ele
 * Soldering Iron and Solder
 * Tape, rubber band, and/or any other items used to fasten items together
 
-## H-Bridge DC Motor Controller
+## Implementation
+
+### H-Bridge DC Motor Controller
 
 L298N is a dual H-Bridge motor driver which allows speed and direction control of two DC motors at the same time. Instead of using L298N driver, a H-Bridge was built reusing the RC Car's circuit board components. The transistors and resistors that was used in the original circuit board was soldered out. This was only done to further improve my understanding of the components and logic.
 
 The transistors and resistors were temporarily installed as a circuit on a breadboard. This H-Bridge circuit was connected to Arduino and the RC cars DC motor for testing. The logic was tested for simple commands such as moving forward, backward, left and right. Once the H-Bridge became fully functioning it was transfered ont a PCB board and soldered; making it lightweight and tidier.
 
-## HC-SR04 Ultrasonic sensor implementation
+### HC-SR04 Ultrasonic sensor
 
-## 28BYJ-48 Stepper motor with ULN2003 driver implementation
+### 28BYJ-48 Stepper motor with ULN2003 driver
 
-## SG90 Micro servo implementation
+### SG90 Micro servo
 
-## Additional changes
+### Additional changes
 
 As the RC Car was quiet old the wires looked a bit weak hence, the RC car wires from motor and battery compartment was rewired.
 
