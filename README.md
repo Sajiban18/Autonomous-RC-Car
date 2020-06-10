@@ -25,7 +25,14 @@ Built an Autonomous RC Car using a simple RC Car, Arduino Uno Board and some ele
 
 L298N is a dual H-Bridge motor driver which allows speed and direction control of two DC motors at the same time. Instead of using L298N driver, a H-Bridge was built reusing the RC Car's circuit board components. The transistors and resistors that was used in the original circuit board was soldered out. This was only done to further improve my understanding of the components and logic.
 
-<img src="RC%20Car%20Circuit%20Board.JPG" width="500">
+<div class="row">
+  <div class="column">
+    <img src="RC%20Car%20Circuit%20Board.JPG" width="420" height="270">
+  </div>
+  <div class="column">
+     <img src="Temp%20H-Bridge.JPG" width="420" height="270">
+  </div>
+</div>
 
 The transistors and resistors were temporarily installed as a circuit on a breadboard. This H-Bridge circuit was connected to Arduino and the RC cars DC motor for testing. The logic was tested for simple commands such as moving forward, backward, left and right. Once the H-Bridge became fully functioning it was transfered ont a PCB board and soldered; making it lightweight and tidier.
 
