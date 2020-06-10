@@ -27,10 +27,10 @@ L298N is a dual H-Bridge motor driver which allows speed and direction control o
 
 <div class="row">
   <div class="column">
-    <img src="RC%20Car%20Circuit%20Board.JPG" width="420" height="270">
+    <img src="RC%20Car%20Circuit%20Board.JPG" width="400" height="270">
   </div>
   <div class="column">
-     <img src="Temp%20H-Bridge.JPG" width="420" height="270">
+     <img src="Temp%20H-Bridge.JPG" width="400" height="270">
   </div>
 </div>
 
