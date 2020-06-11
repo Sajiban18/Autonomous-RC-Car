@@ -1,4 +1,5 @@
 #include <AccelStepper.h>
+#include <NewPing.h>
 #define HALFSTEP 8  //Half-step mode (8 step control signal sequence)
 
 // Motor pin definitions
@@ -6,6 +7,9 @@
 #define mtrPin2  11     //IN2 on the ULN2003 driver 1
 #define mtrPin3  12     //IN3 on the ULN2003 driver 1
 #define mtrPin4  13     //IN4 on the ULN2003 driver 1
+
+//Accel Stepper function is used for stepper motor
+AccelStepper stepper1(HALFSTEP, mtrPin1, mtrPin3, mtrPin2, mtrPin4);
 
 //Forward & Backward Motor Pins
 int FB1 = 9;
@@ -18,6 +22,9 @@ int LR2 = 3;
 //UltraSonic Sensor Pins
 int USTrig = 7;
 int USEcho = 8;
+int maxDist = 350;
+
+NewPing sonar(USTrig, USEcho, maxDist);
 
 long duration;
 int distance;
@@ -33,8 +40,7 @@ int objectDistance = 25;
 int forwardSpeed = 125;
 int backwardSpeed = 125;
 
-//Accel Stepper function is used for stepper motor
-AccelStepper stepper1(HALFSTEP, mtrPin1, mtrPin3, mtrPin2, mtrPin4);
+
 
 void forward() {
   analogWrite(FB1, forwardSpeed);
@@ -86,14 +92,17 @@ void rightBackward() {
 }
 
 int calculateDistance(int msTime) {
-  digitalWrite(USTrig, LOW);
-  delayMicroseconds(3);
-  digitalWrite(USTrig, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(USTrig, LOW);
+//  digitalWrite(USTrig, LOW);
+//  delayMicroseconds(2);
+//  digitalWrite(USTrig, HIGH);
+//  delayMicroseconds(10);
+//  digitalWrite(USTrig, LOW);
+//
+//  duration = pulseIn(USEcho, HIGH, msTime);
+//  return duration*0.034/2;
 
-  duration = pulseIn(USEcho, HIGH, msTime);
-  return (duration / 2) / 29.1;
+  //return sonar.ping_cm();
+  return sonar.convert_cm(sonar.ping_median(2)); 
 }
 
 void printDistance() {
@@ -158,8 +167,8 @@ void checkCurrentPosition() {
 
 void setup() {
   Serial.begin(9600);
-  stepper1.setMaxSpeed(1500.0);
-  stepper1.setAcceleration(500.0);  //Make the acc quick
+  stepper1.setMaxSpeed(1250.0);
+  stepper1.setAcceleration(450.0);  //Make the acc quick
   //stepper1.setSpeed(500.0);
   stepper1.moveTo(4096/4);  //Rotate 1 revolution 4096/2
 
@@ -183,59 +192,59 @@ void loop() {
   //Store distances of data in distances array 
   checkCurrentPosition();
 
-  if(scanComplete) {
-    if(distances[0] < objectDistance || distances[1] < objectDistance || distances[2] < objectDistance || distances[3] < objectDistance || distances[4] < objectDistance) {
-      //Object in Front but not on Left or Right
-      if(distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] < objectDistance && distances[3] >= objectDistance && distances[4] >= objectDistance) {
-        //applyBreak();
-        directionChoice();
-      }
-
-      //Object onRight
-      if((distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] >= objectDistance) && (distances[3] < objectDistance || distances[4] < objectDistance)) {
-        if(distances[4] < objectDistance) {
-          //applyBreak();
-          leftForward(165);
-        } else {
-          //applyBreak();
-          leftForward(255);
-        }
-      } 
-    
-      if((distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] < objectDistance) && (distances[3] < objectDistance || distances[4] < objectDistance)) {
-        //applyBreak();
-        rightBackward();
-      }
-  
-      //Object onLeft
-      if((distances[4] >= objectDistance && distances[3] >= objectDistance && distances[2] >= objectDistance) && (distances[0] < objectDistance || distances[1] < objectDistance)) {
-        if(distances[0] < objectDistance) {
-          //applyBreak();
-          rightForward(165);
-        } else {
-          //applyBreak();
-          rightForward(255);
-        }
-      } 
-      
-      if((distances[4] >= objectDistance && distances[3] >= objectDistance && distances[2] < objectDistance) && (distances[0] < objectDistance || distances[1] < objectDistance)) {
-        //applyBreak();
-        leftBackward();
-      }
-  
-      // Fully blocked at the front left and right
-      if((distances[0] < objectDistance && distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance && distances[4] < objectDistance)
-      || (distances[0] >= objectDistance && distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance && distances[4] >= objectDistance)) {
-        //stepper1.moveTo(0);
-        //applyBreak();
-        if(distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance) {
-          backward();
-        }
-        //applyBreak();
-        directionChoice();
-      }  
-    } else {
-      forward();
-    }
-  }
+//  if(scanComplete) {
+//    if(distances[0] < objectDistance || distances[1] < objectDistance || distances[2] < objectDistance || distances[3] < objectDistance || distances[4] < objectDistance) {
+//      //Object in Front but not on Left or Right
+//      if(distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] < objectDistance && distances[3] >= objectDistance && distances[4] >= objectDistance) {
+//        //applyBreak();
+//        directionChoice();
+//      }
+//
+//      //Object onRight
+//      if((distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] >= objectDistance) && (distances[3] < objectDistance || distances[4] < objectDistance)) {
+//        if(distances[4] < objectDistance) {
+//          //applyBreak();
+//          leftForward(165);
+//        } else {
+//          //applyBreak();
+//          leftForward(255);
+//        }
+//      } 
+//    
+//      if((distances[0] >= objectDistance && distances[1] >= objectDistance && distances[2] < objectDistance) && (distances[3] < objectDistance || distances[4] < objectDistance)) {
+//        //applyBreak();
+//        rightBackward();
+//      }
+//  
+//      //Object onLeft
+//      if((distances[4] >= objectDistance && distances[3] >= objectDistance && distances[2] >= objectDistance) && (distances[0] < objectDistance || distances[1] < objectDistance)) {
+//        if(distances[0] < objectDistance) {
+//          //applyBreak();
+//          rightForward(165);
+//        } else {
+//          //applyBreak();
+//          rightForward(255);
+//        }
+//      } 
+//      
+//      if((distances[4] >= objectDistance && distances[3] >= objectDistance && distances[2] < objectDistance) && (distances[0] < objectDistance || distances[1] < objectDistance)) {
+//        //applyBreak();
+//        leftBackward();
+//      }
+//  
+//      // Fully blocked at the front left and right
+//      if((distances[0] < objectDistance && distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance && distances[4] < objectDistance)
+//      || (distances[0] >= objectDistance && distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance && distances[4] >= objectDistance)) {
+//        //stepper1.moveTo(0);
+//        //applyBreak();
+//        if(distances[1] < objectDistance && distances[2] < objectDistance && distances[3] < objectDistance) {
+//          backward();
+//        }
+//        //applyBreak();
+//        directionChoice();
+//      }  
+//    } else {
+//      forward();
+//    }
+//  }
 }
